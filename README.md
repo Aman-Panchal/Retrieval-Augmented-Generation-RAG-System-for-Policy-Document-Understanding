@@ -1,105 +1,92 @@
-📄 Retrieval-Augmented Generation (RAG) for Policy Document QA
+# 📄 RAG-based Question Answering System for Policy Documents
 
-This project demonstrates an end-to-end RAG pipeline that allows querying large policy documents using vector search and LLMs. Built with LangChain, FAISS, and transformer-based models, the system can retrieve relevant chunks and generate high-quality, context-aware answers.
+This project demonstrates a complete **Retrieval-Augmented Generation (RAG)** pipeline for querying complex policy documents using semantic search and large language models (LLMs). It enables accurate, context-aware responses to natural language questions by combining document retrieval with generative AI.
 
-🧠 Objective
+---
 
-Enable natural language question-answering over long policy documents by combining semantic search with generative models (RAG approach).
+## 🚀 Project Highlights
 
-🔧 Tech Stack
+- 📥 **Document Ingestion**: Loads multiple `.txt` policy files using `TextLoader` from LangChain.
+- ✂️ **Chunking**: Uses `RecursiveCharacterTextSplitter` to split documents into manageable overlapping chunks for better context preservation.
+- 🧠 **Vector Store Creation**: Embeds chunks using `HuggingFaceEmbeddings` and stores them in a FAISS index for fast similarity search.
+- 🔍 **Document Retrieval**: Retrieves relevant chunks using FAISS based on a user’s query.
+- 🤖 **LLM Integration**: Combines retrieved context with a prompt and passes it through an LLM to generate structured answers.
 
-    🧠 LangChain for chaining components (retriever, prompts, LLM)
+---
 
-    🔍 FAISS for fast vector-based retrieval
+## 🛠️ Technologies Used
 
-    📄 TextLoader for loading .txt policy files
+- Python
+- LangChain
+- FAISS (Facebook AI Similarity Search)
+- Hugging Face Transformers
+- OpenAI (optional, for LLM-based components)
 
-    ✂️ RecursiveCharacterTextSplitter for smart chunking
+---
 
-    🤗 Hugging Face Transformers or OpenAI LLM for response generation
+## 🧱 Key Pipeline Steps
 
-🗂️ Project Structure
+1. **Document Loading**
+   - Reads policy `.txt` files using `TextLoader`.
 
-├── RAG_final.ipynb       # Notebook containing the full RAG pipeline
-├── data/
-│   ├── policy1.txt       # Example policy document
-│   ├── policy2.txt
-│   └── policy3.txt
-└── vectorstore/
-    └── faiss_index.faiss # Saved FAISS vector DB (optional)
+2. **Chunking**
+   - Applies `RecursiveCharacterTextSplitter` with overlap to maintain context flow across chunks.
 
-✅ Step-by-Step Workflow
-1. 📥 Document Loading
+3. **Embeddings + Vector Store**
+   - Generates embeddings using `HuggingFaceEmbeddings`.
+   - Stores chunks in a FAISS vector store and saves to disk.
 
-    Use TextLoader from LangChain to load multiple .txt policy documents.
+4. **Query Handling**
+   - Accepts natural language questions.
+   - Retrieves top matching chunks from the vector store.
+   - Prepares a context-rich prompt.
 
-    Combine all text into a single corpus.
+5. **LLM Prompting**
+   - Uses LangChain prompt templates with a structured output parser.
+   - Passes prompt to an LLM to return a structured summary and category.
 
-loader = TextLoader("data/policy1.txt")
-docs = loader.load()
+---
 
+## 📦 Output Example
 
-2. ✂️ Text Chunking
+**Input Question:**  
+`"Give introduction from Comprehensive AI Ethics Policy Document"`
 
-    Apply RecursiveCharacterTextSplitter to split documents into manageable chunks with overlaps for context preservation.
-
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=800,
-    chunk_overlap=0
-)
-chunks = text_splitter.split_documents(docs)
-
-
-3. 🧮 Embedding and Vector Store Creation
-
-    Convert text chunks into vector embeddings using HuggingFaceEmbeddings or OpenAIEmbeddings.
-
-    Store vectors in FAISS for fast semantic retrieval.
-
-vectorstore = FAISS.from_documents(chunks, embedding)
-vectorstore.save_local("vectorstore/")
-
-4. 🔍 MultiQuery Retriever 
-
-    Optionally enrich retrieval using MultiQueryRetriever, which asks the LLM to reformulate the question in multiple ways to retrieve diverse documents.
-
-5. 🤖 LLM Chain for Response Generation
-
-    Use a PromptTemplate to structure the query.
-
-    Inject retrieved context into a summarization or Q&A prompt.
-
-    Generate output using LLMChain or a Runnable sequence in LangChain.
-
-6. 🔄 Full Chain Execution
-
-The final chain performs:
-
-    Input question preprocessing
-
-    Document retrieval via FAISS
-
-    Context construction
-
-    LLM prompt generation and response parsing
-
-result = final_chain.invoke({"question": "What is the purpose of the AI Ethics policy?"})
-print(result)
-
-
-📊 Output Example
-
-Input:
-"What is the purpose of the Comprehensive AI Ethics Policy Document?"
-
-Output:
-
+**Returned Output:**
+```json
 {
-  "summary": "The policy outlines the company's commitment to ethical AI development and its responsible use.",
+  "summary": "This document outlines the company's ethical principles for developing and using AI.",
   "category": "AI Governance"
 }
 
-🚀 Future Enhancements
+---
+
+## 📁 Folder Structure
+```
+project_root/
+├── RAG_final.ipynb          # Main pipeline notebook
+├── data/
+│   ├── policy1.txt
+│   ├── policy2.txt
+│   └── policy3.txt
+└── vectorstore/
+    └── faiss_index.faiss    # Saved vector index
+```
+---
+
+✅ Ideal Use Cases
+
+    AI policy compliance tools
+
+    Document intelligence for enterprises
+
+    Legal and compliance document summarization
+
+    Context-aware chatbots with deep domain knowledge
+
+---
+
+## 🚀 Future Enhancements
 
     UI integration (e.g., Streamlit or Gradio)
 
