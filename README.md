@@ -58,7 +58,7 @@ This project demonstrates a complete **Retrieval-Augmented Generation (RAG)** pi
   "summary": "This document outlines the company's ethical principles for developing and using AI.",
   "category": "AI Governance"
 }
-
+```
 ---
 
 ## 📁 Folder Structure
